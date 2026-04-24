@@ -35,6 +35,30 @@
         <button id="yes">はい</button>
         <button id="no">いいえ</button>
       </section>
+      <section id="gender-self" style="display: none">
+        <p>あなたの性別を教えてください</p>
+        <button class="gender-self-option" data-value="男">男</button>
+        <button class="gender-self-option" data-value="女">女</button>
+        <div>
+          <label>
+            その他（自由記述）:
+            <input type="text" id="gender-self-other" />
+          </label>
+          <button id="gender-self-other-submit">決定</button>
+        </div>
+      </section>
+      <section id="gender-match" style="display: none">
+        <p>あなたがマッチしたい性別を教えてください</p>
+        <button class="gender-match-option" data-value="男">男</button>
+        <button class="gender-match-option" data-value="女">女</button>
+        <div>
+          <label>
+            その他（自由記述）:
+            <input type="text" id="gender-match-other" />
+          </label>
+          <button id="gender-match-other-submit">決定</button>
+        </div>
+      </section>
       <section id="retry" style="display: none">
         <button id="retry">再マッチング</button>
         <button id="restart">最初からやり直す</button>
@@ -70,6 +94,24 @@
       const yesButton = questionSection.querySelector("#yes");
       const noButton = questionSection.querySelector("#no");
 
+      const genderSelfSection = document.querySelector("#gender-self");
+      const genderSelfOptionButtons =
+        genderSelfSection.querySelectorAll(".gender-self-option");
+      const genderSelfOtherInput =
+        genderSelfSection.querySelector("#gender-self-other");
+      const genderSelfOtherSubmit = genderSelfSection.querySelector(
+        "#gender-self-other-submit",
+      );
+
+      const genderMatchSection = document.querySelector("#gender-match");
+      const genderMatchOptionButtons =
+        genderMatchSection.querySelectorAll(".gender-match-option");
+      const genderMatchOtherInput =
+        genderMatchSection.querySelector("#gender-match-other");
+      const genderMatchOtherSubmit = genderMatchSection.querySelector(
+        "#gender-match-other-submit",
+      );
+
       const retrySection = document.querySelector("#retry");
       const retryButton = retrySection.querySelector("#retry");
       const restartButton = retrySection.querySelector("#restart");
@@ -77,9 +119,36 @@
       const resultSection = document.querySelector("#result");
       const resultText = resultSection.querySelector("#result-text");
 
+      const answers = {
+        isTsukubaStudent: null,
+        genderSelf: null,
+        genderMatch: null,
+      };
+
+      const showOnly = (sectionToShow) => {
+        for (const section of [
+          questionSection,
+          genderSelfSection,
+          genderMatchSection,
+          retrySection,
+          resultSection,
+        ]) {
+          section.style.display = section === sectionToShow ? "block" : "none";
+        }
+      };
+
+      const askGenderSelf = () => {
+        showOnly(genderSelfSection);
+      };
+
+      const askGenderMatch = () => {
+        showOnly(genderMatchSection);
+      };
+
       const match = async () => {
-        questionSection.style.display = "none";
         resultSection.style.display = "block";
+        genderMatchSection.style.display = "none";
+        questionSection.style.display = "none";
         console.log(resultSection);
         resultText.textContent = "マッチング中";
 
@@ -100,11 +169,41 @@
         resultText.textContent = "あなたにマッチする人は見つかりませんでした";
       };
 
-      yesButton.addEventListener("click", async () => {
-        await match();
+      yesButton.addEventListener("click", () => {
+        answers.isTsukubaStudent = true;
+        askGenderSelf();
       });
 
-      noButton.addEventListener("click", async () => {
+      noButton.addEventListener("click", () => {
+        answers.isTsukubaStudent = false;
+        askGenderSelf();
+      });
+
+      for (const button of genderSelfOptionButtons) {
+        button.addEventListener("click", () => {
+          answers.genderSelf = button.dataset.value;
+          askGenderMatch();
+        });
+      }
+
+      genderSelfOtherSubmit.addEventListener("click", () => {
+        const value = genderSelfOtherInput.value.trim();
+        if (!value) return;
+        answers.genderSelf = value;
+        askGenderMatch();
+      });
+
+      for (const button of genderMatchOptionButtons) {
+        button.addEventListener("click", async () => {
+          answers.genderMatch = button.dataset.value;
+          await match();
+        });
+      }
+
+      genderMatchOtherSubmit.addEventListener("click", async () => {
+        const value = genderMatchOtherInput.value.trim();
+        if (!value) return;
+        answers.genderMatch = value;
         await match();
       });
 
@@ -113,9 +212,12 @@
       });
 
       restartButton.addEventListener("click", () => {
-        retrySection.style.display = "none";
-        resultSection.style.display = "none";
-        questionSection.style.display = "block";
+        answers.isTsukubaStudent = null;
+        answers.genderSelf = null;
+        answers.genderMatch = null;
+        genderSelfOtherInput.value = "";
+        genderMatchOtherInput.value = "";
+        showOnly(questionSection);
       });
     </script>
   </body>
