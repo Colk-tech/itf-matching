@@ -820,8 +820,7 @@
         const selected = Array.from(radios).find((radio) => radio.checked);
         if (!selected) return null;
         if (selected.value !== "other") return selected.value;
-        const other = otherInput.value.trim();
-        return other || null;
+        return otherInput.value.trim() || "その他";
     };
 
     const bindOtherToggle = (radios, otherInput) => {
