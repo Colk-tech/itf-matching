@@ -37,27 +37,37 @@
       </section>
       <section id="gender-self" style="display: none">
         <p>あなたの性別を教えてください</p>
-        <button class="gender-self-option" data-value="男">男</button>
-        <button class="gender-self-option" data-value="女">女</button>
-        <div>
+        <div style="display: flex; align-items: center; gap: 1em; flex-wrap: wrap">
+          <label><input type="radio" name="gender-self" value="男" />男</label>
+          <label><input type="radio" name="gender-self" value="女" />女</label>
           <label>
-            その他（自由記述）:
-            <input type="text" id="gender-self-other" />
+            <input type="radio" name="gender-self" value="other" />その他（自由記述）
           </label>
-          <button id="gender-self-other-submit">決定</button>
+          <input
+            type="text"
+            id="gender-self-other"
+            aria-label="その他の性別（自由記述）"
+            disabled
+          />
         </div>
+        <button id="gender-self-submit">決定</button>
       </section>
       <section id="gender-match" style="display: none">
         <p>あなたがマッチしたい性別を教えてください</p>
-        <button class="gender-match-option" data-value="男">男</button>
-        <button class="gender-match-option" data-value="女">女</button>
-        <div>
+        <div style="display: flex; align-items: center; gap: 1em; flex-wrap: wrap">
+          <label><input type="radio" name="gender-match" value="男" />男</label>
+          <label><input type="radio" name="gender-match" value="女" />女</label>
           <label>
-            その他（自由記述）:
-            <input type="text" id="gender-match-other" />
+            <input type="radio" name="gender-match" value="other" />その他（自由記述）
           </label>
-          <button id="gender-match-other-submit">決定</button>
+          <input
+            type="text"
+            id="gender-match-other"
+            aria-label="その他のマッチしたい性別（自由記述）"
+            disabled
+          />
         </div>
+        <button id="gender-match-submit">決定</button>
       </section>
       <section id="retry" style="display: none">
         <button id="retry">再マッチング</button>
@@ -95,22 +105,22 @@
       const noButton = questionSection.querySelector("#no");
 
       const genderSelfSection = document.querySelector("#gender-self");
-      const genderSelfOptionButtons =
-        genderSelfSection.querySelectorAll(".gender-self-option");
+      const genderSelfRadios = genderSelfSection.querySelectorAll(
+        'input[name="gender-self"]',
+      );
       const genderSelfOtherInput =
         genderSelfSection.querySelector("#gender-self-other");
-      const genderSelfOtherSubmit = genderSelfSection.querySelector(
-        "#gender-self-other-submit",
-      );
+      const genderSelfSubmit =
+        genderSelfSection.querySelector("#gender-self-submit");
 
       const genderMatchSection = document.querySelector("#gender-match");
-      const genderMatchOptionButtons =
-        genderMatchSection.querySelectorAll(".gender-match-option");
+      const genderMatchRadios = genderMatchSection.querySelectorAll(
+        'input[name="gender-match"]',
+      );
       const genderMatchOtherInput =
         genderMatchSection.querySelector("#gender-match-other");
-      const genderMatchOtherSubmit = genderMatchSection.querySelector(
-        "#gender-match-other-submit",
-      );
+      const genderMatchSubmit =
+        genderMatchSection.querySelector("#gender-match-submit");
 
       const retrySection = document.querySelector("#retry");
       const retryButton = retrySection.querySelector("#retry");
@@ -179,29 +189,40 @@
         askGenderSelf();
       });
 
-      for (const button of genderSelfOptionButtons) {
-        button.addEventListener("click", () => {
-          answers.genderSelf = button.dataset.value;
-          askGenderMatch();
-        });
-      }
+      const readGenderChoice = (radios, otherInput) => {
+        const selected = Array.from(radios).find((radio) => radio.checked);
+        if (!selected) return null;
+        if (selected.value !== "other") return selected.value;
+        const other = otherInput.value.trim();
+        return other || null;
+      };
 
-      genderSelfOtherSubmit.addEventListener("click", () => {
-        const value = genderSelfOtherInput.value.trim();
+      const bindOtherToggle = (radios, otherInput) => {
+        for (const radio of radios) {
+          radio.addEventListener("change", () => {
+            const isOther =
+              Array.from(radios).find((r) => r.checked)?.value === "other";
+            otherInput.disabled = !isOther;
+            if (isOther) otherInput.focus();
+          });
+        }
+      };
+
+      bindOtherToggle(genderSelfRadios, genderSelfOtherInput);
+      bindOtherToggle(genderMatchRadios, genderMatchOtherInput);
+
+      genderSelfSubmit.addEventListener("click", () => {
+        const value = readGenderChoice(genderSelfRadios, genderSelfOtherInput);
         if (!value) return;
         answers.genderSelf = value;
         askGenderMatch();
       });
 
-      for (const button of genderMatchOptionButtons) {
-        button.addEventListener("click", async () => {
-          answers.genderMatch = button.dataset.value;
-          await match();
-        });
-      }
-
-      genderMatchOtherSubmit.addEventListener("click", async () => {
-        const value = genderMatchOtherInput.value.trim();
+      genderMatchSubmit.addEventListener("click", async () => {
+        const value = readGenderChoice(
+          genderMatchRadios,
+          genderMatchOtherInput,
+        );
         if (!value) return;
         answers.genderMatch = value;
         await match();
@@ -215,8 +236,13 @@
         answers.isTsukubaStudent = null;
         answers.genderSelf = null;
         answers.genderMatch = null;
+        for (const radio of [...genderSelfRadios, ...genderMatchRadios]) {
+          radio.checked = false;
+        }
         genderSelfOtherInput.value = "";
+        genderSelfOtherInput.disabled = true;
         genderMatchOtherInput.value = "";
+        genderMatchOtherInput.disabled = true;
         showOnly(questionSection);
       });
     </script>
