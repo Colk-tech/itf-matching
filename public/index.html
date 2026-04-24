@@ -555,6 +555,7 @@
             />
           </div>
           <div class="actions">
+            <button class="btn btn--ghost" id="gender-self-back">戻る</button>
             <button class="btn btn--primary" id="gender-self-submit">
               次へ
             </button>
@@ -583,6 +584,7 @@
             />
           </div>
           <div class="actions">
+            <button class="btn btn--ghost" id="gender-match-back">戻る</button>
             <button class="btn btn--accent" id="gender-match-submit">
               マッチングする
             </button>
@@ -649,6 +651,7 @@
       );
       const genderSelfOtherInput = document.querySelector("#gender-self-other");
       const genderSelfSubmit = document.querySelector("#gender-self-submit");
+      const genderSelfBack = document.querySelector("#gender-self-back");
 
       const genderMatchSection = document.querySelector("#gender-match");
       const genderMatchRadios = genderMatchSection.querySelectorAll(
@@ -658,6 +661,7 @@
         "#gender-match-other",
       );
       const genderMatchSubmit = document.querySelector("#gender-match-submit");
+      const genderMatchBack = document.querySelector("#gender-match-back");
 
       const matchingSection = document.querySelector("#matching");
       const matchingStatus = document.querySelector("#matching-status");
@@ -857,6 +861,14 @@
         if (!value) return;
         answers.genderSelf = value;
         show(genderMatchSection);
+      });
+
+      genderSelfBack.addEventListener("click", () => {
+        show(questionSection);
+      });
+
+      genderMatchBack.addEventListener("click", () => {
+        show(genderSelfSection);
       });
 
       genderMatchSubmit.addEventListener("click", async () => {
