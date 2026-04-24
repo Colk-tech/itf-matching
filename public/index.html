@@ -378,14 +378,8 @@
         width: 64px;
         height: 64px;
         border-radius: 50%;
-        background: var(--accent);
-        color: var(--surface);
-        font-family:
-          "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-        font-size: 1.6rem;
-        font-weight: 500;
-        display: grid;
-        place-items: center;
+        object-fit: cover;
+        background: var(--accent-soft);
         box-shadow: 0 10px 22px -10px rgba(199, 62, 92, 0.55);
       }
 
@@ -772,9 +766,13 @@
         const profile = document.createElement("div");
         profile.className = "profile";
 
-        const avatar = document.createElement("div");
+        const avatar = document.createElement("img");
         avatar.className = "profile__avatar";
-        avatar.textContent = "伊";
+        avatar.src =
+          "https://pbs.twimg.com/profile_images/1609190847005720577/1ygTzJuX_400x400.jpg";
+        avatar.alt = "伊藤 愛基 のプロフィール画像";
+        avatar.loading = "lazy";
+        avatar.decoding = "async";
         profile.appendChild(avatar);
 
         const info = document.createElement("div");
