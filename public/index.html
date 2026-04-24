@@ -155,11 +155,28 @@
         showOnly(genderMatchSection);
       };
 
+      const renderMatchResult = () => {
+        if (answers.genderMatch !== "男") {
+          resultText.textContent = "マッチが成立しませんでした";
+          return;
+        }
+        if (answers.genderSelf === "女") {
+          resultText.textContent = "あなたにマッチする人が見つかりました: ";
+          const link = document.createElement("a");
+          link.href = "https://x.com/Colk_";
+          link.textContent = "こるく";
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          resultText.appendChild(link);
+          return;
+        }
+        resultText.textContent = "あなたにマッチする人は見つかりませんでした";
+      };
+
       const match = async () => {
         resultSection.style.display = "block";
         genderMatchSection.style.display = "none";
         questionSection.style.display = "none";
-        console.log(resultSection);
         resultText.textContent = "マッチング中";
 
         await new Promise((resolve) => {
@@ -176,7 +193,7 @@
 
         retrySection.style.display = "block";
 
-        resultText.textContent = "あなたにマッチする人は見つかりませんでした";
+        renderMatchResult();
       };
 
       yesButton.addEventListener("click", () => {
