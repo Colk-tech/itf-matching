@@ -132,6 +132,12 @@
         margin: 0 0 24px;
       }
 
+      .question-group + .question-group {
+        margin-top: 28px;
+        padding-top: 28px;
+        border-top: 1px solid var(--border);
+      }
+
       .choices {
         display: flex;
         flex-wrap: wrap;
@@ -557,58 +563,55 @@
       </header>
 
       <main class="card">
-        <section class="step" id="gender-self">
-          <p class="step__prompt">あなたの性別を教えてください</p>
-          <div class="choices">
-            <label class="choice">
-              <input type="radio" name="gender-self" value="男" />男
-            </label>
-            <label class="choice">
-              <input type="radio" name="gender-self" value="女" />女
-            </label>
-            <label class="choice">
-              <input type="radio" name="gender-self" value="other" />その他
-            </label>
-            <input
-              type="text"
-              class="other-input"
-              id="gender-self-other"
-              placeholder="自由記述"
-              aria-label="その他の性別（自由記述）"
-              disabled
-            />
+        <section class="step" id="gender">
+          <div class="question-group">
+            <p class="step__prompt">あなたの性別を教えてください</p>
+            <div class="choices">
+              <label class="choice">
+                <input type="radio" name="gender-self" value="男" />男
+              </label>
+              <label class="choice">
+                <input type="radio" name="gender-self" value="女" />女
+              </label>
+              <label class="choice">
+                <input type="radio" name="gender-self" value="other" />その他
+              </label>
+              <input
+                type="text"
+                class="other-input"
+                id="gender-self-other"
+                placeholder="自由記述"
+                aria-label="その他の性別（自由記述）"
+                disabled
+              />
+            </div>
           </div>
-          <div class="actions">
-            <button class="btn btn--primary" id="gender-self-submit">
-              次へ
-            </button>
-          </div>
-        </section>
 
-        <section class="step" id="gender-match" hidden>
-          <p class="step__prompt">あなたがマッチしたい性別を教えてください</p>
-          <div class="choices">
-            <label class="choice">
-              <input type="radio" name="gender-match" value="男" />男
-            </label>
-            <label class="choice">
-              <input type="radio" name="gender-match" value="女" />女
-            </label>
-            <label class="choice">
-              <input type="radio" name="gender-match" value="other" />その他
-            </label>
-            <input
-              type="text"
-              class="other-input"
-              id="gender-match-other"
-              placeholder="自由記述"
-              aria-label="その他のマッチしたい性別（自由記述）"
-              disabled
-            />
+          <div class="question-group">
+            <p class="step__prompt">あなたがマッチしたい性別を教えてください</p>
+            <div class="choices">
+              <label class="choice">
+                <input type="radio" name="gender-match" value="男" />男
+              </label>
+              <label class="choice">
+                <input type="radio" name="gender-match" value="女" />女
+              </label>
+              <label class="choice">
+                <input type="radio" name="gender-match" value="other" />その他
+              </label>
+              <input
+                type="text"
+                class="other-input"
+                id="gender-match-other"
+                placeholder="自由記述"
+                aria-label="その他のマッチしたい性別（自由記述）"
+                disabled
+              />
+            </div>
           </div>
+
           <div class="actions">
-            <button class="btn btn--ghost" id="gender-match-back">戻る</button>
-            <button class="btn btn--accent" id="gender-match-submit">
+            <button class="btn btn--accent" id="gender-submit">
               マッチングする
             </button>
           </div>
@@ -668,22 +671,19 @@
     </div>
 
     <script>
-      const genderSelfSection = document.querySelector("#gender-self");
-      const genderSelfRadios = genderSelfSection.querySelectorAll(
+      const genderSection = document.querySelector("#gender");
+      const genderSelfRadios = genderSection.querySelectorAll(
         'input[name="gender-self"]',
       );
       const genderSelfOtherInput = document.querySelector("#gender-self-other");
-      const genderSelfSubmit = document.querySelector("#gender-self-submit");
 
-      const genderMatchSection = document.querySelector("#gender-match");
-      const genderMatchRadios = genderMatchSection.querySelectorAll(
+      const genderMatchRadios = genderSection.querySelectorAll(
         'input[name="gender-match"]',
       );
       const genderMatchOtherInput = document.querySelector(
         "#gender-match-other",
       );
-      const genderMatchSubmit = document.querySelector("#gender-match-submit");
-      const genderMatchBack = document.querySelector("#gender-match-back");
+      const genderSubmit = document.querySelector("#gender-submit");
 
       const matchingSection = document.querySelector("#matching");
       const matchingStatus = document.querySelector("#matching-status");
@@ -694,12 +694,7 @@
       const retryButton = document.querySelector("#retry-button");
       const restartButton = document.querySelector("#restart-button");
 
-      const allSteps = [
-        genderSelfSection,
-        genderMatchSection,
-        matchingSection,
-        resultSection,
-      ];
+      const allSteps = [genderSection, matchingSection, resultSection];
 
       const answers = {
         genderSelf: null,
@@ -862,24 +857,15 @@
         renderSimpleMessage("あなたにマッチする人は見つかりませんでした");
       };
 
-      genderSelfSubmit.addEventListener("click", () => {
-        const value = readGenderChoice(genderSelfRadios, genderSelfOtherInput);
-        if (!value) return;
-        answers.genderSelf = value;
-        show(genderMatchSection);
-      });
-
-      genderMatchBack.addEventListener("click", () => {
-        show(genderSelfSection);
-      });
-
-      genderMatchSubmit.addEventListener("click", async () => {
-        const value = readGenderChoice(
+      genderSubmit.addEventListener("click", async () => {
+        const self = readGenderChoice(genderSelfRadios, genderSelfOtherInput);
+        const partner = readGenderChoice(
           genderMatchRadios,
           genderMatchOtherInput,
         );
-        if (!value) return;
-        answers.genderMatch = value;
+        if (!self || !partner) return;
+        answers.genderSelf = self;
+        answers.genderMatch = partner;
         await match();
       });
 
@@ -899,7 +885,7 @@
         genderMatchOtherInput.disabled = true;
         heartsLayer.innerHTML = "";
         resultBody.innerHTML = "";
-        show(genderSelfSection);
+        show(genderSection);
       });
     </script>
   </body>
