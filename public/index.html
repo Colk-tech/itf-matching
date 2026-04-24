@@ -557,15 +557,7 @@
       </header>
 
       <main class="card">
-        <section class="step" id="question">
-          <p class="step__prompt">あなたは筑波大生ですか？</p>
-          <div class="actions">
-            <button class="btn btn--primary" id="yes">はい</button>
-            <button class="btn btn--ghost" id="no">いいえ</button>
-          </div>
-        </section>
-
-        <section class="step" id="gender-self" hidden>
+        <section class="step" id="gender-self">
           <p class="step__prompt">あなたの性別を教えてください</p>
           <div class="choices">
             <label class="choice">
@@ -587,7 +579,6 @@
             />
           </div>
           <div class="actions">
-            <button class="btn btn--ghost" id="gender-self-back">戻る</button>
             <button class="btn btn--primary" id="gender-self-submit">
               次へ
             </button>
@@ -677,17 +668,12 @@
     </div>
 
     <script>
-      const questionSection = document.querySelector("#question");
-      const yesButton = document.querySelector("#yes");
-      const noButton = document.querySelector("#no");
-
       const genderSelfSection = document.querySelector("#gender-self");
       const genderSelfRadios = genderSelfSection.querySelectorAll(
         'input[name="gender-self"]',
       );
       const genderSelfOtherInput = document.querySelector("#gender-self-other");
       const genderSelfSubmit = document.querySelector("#gender-self-submit");
-      const genderSelfBack = document.querySelector("#gender-self-back");
 
       const genderMatchSection = document.querySelector("#gender-match");
       const genderMatchRadios = genderMatchSection.querySelectorAll(
@@ -709,7 +695,6 @@
       const restartButton = document.querySelector("#restart-button");
 
       const allSteps = [
-        questionSection,
         genderSelfSection,
         genderMatchSection,
         matchingSection,
@@ -717,7 +702,6 @@
       ];
 
       const answers = {
-        isTsukubaStudent: null,
         genderSelf: null,
         genderMatch: null,
       };
@@ -878,25 +862,11 @@
         renderSimpleMessage("あなたにマッチする人は見つかりませんでした");
       };
 
-      yesButton.addEventListener("click", () => {
-        answers.isTsukubaStudent = true;
-        show(genderSelfSection);
-      });
-
-      noButton.addEventListener("click", () => {
-        answers.isTsukubaStudent = false;
-        show(genderSelfSection);
-      });
-
       genderSelfSubmit.addEventListener("click", () => {
         const value = readGenderChoice(genderSelfRadios, genderSelfOtherInput);
         if (!value) return;
         answers.genderSelf = value;
         show(genderMatchSection);
-      });
-
-      genderSelfBack.addEventListener("click", () => {
-        show(questionSection);
       });
 
       genderMatchBack.addEventListener("click", () => {
@@ -918,7 +888,6 @@
       });
 
       restartButton.addEventListener("click", () => {
-        answers.isTsukubaStudent = null;
         answers.genderSelf = null;
         answers.genderMatch = null;
         for (const radio of [...genderSelfRadios, ...genderMatchRadios]) {
@@ -930,7 +899,7 @@
         genderMatchOtherInput.disabled = true;
         heartsLayer.innerHTML = "";
         resultBody.innerHTML = "";
-        show(questionSection);
+        show(genderSelfSection);
       });
     </script>
   </body>
