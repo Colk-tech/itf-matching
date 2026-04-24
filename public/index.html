@@ -104,15 +104,8 @@
         await match();
       });
 
-      noButton.addEventListener("click", () => {
-        questionSection.style.display = "none";
-
-        retrySection.style.display = "block";
-        retryButton.style.display = "none";
-        restartButton.style.display = "inline-block";
-
-        resultSection.style.display = "block";
-        resultText.textContent = "筑波大生以外は利用することができません";
+      noButton.addEventListener("click", async () => {
+        await match();
       });
 
       retryButton.addEventListener("click", async () => {
