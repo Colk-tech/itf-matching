@@ -371,14 +371,6 @@
 
         /* Result */
 
-        .result-simple {
-            text-align: center;
-            padding: 12px 0;
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            animation: fade-up 0.5s ease both;
-        }
-
         .match-headline {
             font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
             font-size: 1.3rem;
@@ -876,14 +868,6 @@
         }
     };
 
-    const renderSimpleMessage = (text) => {
-        resultBody.innerHTML = "";
-        const p = document.createElement("p");
-        p.className = "result-simple";
-        p.textContent = text;
-        resultBody.appendChild(p);
-    };
-
     const renderMatchedProfile = () => {
         resultBody.innerHTML = "";
 
@@ -952,19 +936,8 @@
 
         show(resultSection);
         heartsLayer.innerHTML = "";
-
-        if (answers.genderMatch !== "男") {
-            renderSimpleMessage("マッチが成立しませんでした");
-            return;
-        }
-
-        if (answers.genderSelf === "女") {
-            renderMatchedProfile();
-            spawnHearts();
-            return;
-        }
-
-        renderSimpleMessage("あなたにマッチする人は見つかりませんでした");
+        renderMatchedProfile();
+        spawnHearts();
     };
 
     genderSubmit.addEventListener("click", async () => {
