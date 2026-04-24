@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "license-checker": "^25.0.1",
     "wrangler": "^4.84.1"
   }
 }
