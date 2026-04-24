@@ -162,12 +162,25 @@
         }
         if (answers.genderSelf === "女") {
           resultText.textContent = "あなたにマッチする人が見つかりました: ";
-          const link = document.createElement("a");
-          link.href = "https://x.com/Colk_";
-          link.textContent = "こるく";
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          resultText.appendChild(link);
+
+          const profileLink = document.createElement("a");
+          profileLink.href = "https://x.com/Colk_";
+          profileLink.textContent = "こるく";
+          profileLink.target = "_blank";
+          profileLink.rel = "noopener noreferrer";
+          resultText.appendChild(profileLink);
+
+          resultText.appendChild(document.createTextNode(" ("));
+
+          const dmLink = document.createElement("a");
+          dmLink.href =
+            "https://x.com/messages/compose?recipient_id=1143516189743652864";
+          dmLink.textContent = "DMを送る";
+          dmLink.target = "_blank";
+          dmLink.rel = "noopener noreferrer";
+          resultText.appendChild(dmLink);
+
+          resultText.appendChild(document.createTextNode(")"));
           return;
         }
         resultText.textContent = "あなたにマッチする人は見つかりませんでした";
