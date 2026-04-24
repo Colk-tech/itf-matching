@@ -3,47 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>電通大生専用マッチングアプリ</title>
+    <title>筑波大生専用マッチングアプリ</title>
 
     <meta
       name="description"
-      content="電通大生による、電通大生のためのマッチングアプリ"
+      content="筑波大生による、筑波大生のためのマッチングアプリ"
     />
 
-    <meta property="og:title" content="電通大生専用マッチングアプリ" />
+    <meta property="og:title" content="筑波大生専用マッチングアプリ" />
     <meta
       property="og:description"
-      content="電通大生による、電通大生のためのマッチングアプリ"
-    />
-    <meta
-      property="og:url"
-      content="https://uec-matching.mimifuwacc.workers.dev/"
-    />
-    <meta
-      property="og:image"
-      content="https://uec-matching.mimifuwacc.workers.dev/og.png"
+      content="筑波大生による、筑波大生のためのマッチングアプリ"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="電通大生専用マッチングアプリ" />
+    <meta property="og:site_name" content="筑波大生専用マッチングアプリ" />
 
-    <meta name="twitter:title" content="電通大生専用マッチングアプリ" />
+    <meta name="twitter:title" content="筑波大生専用マッチングアプリ" />
     <meta
       name="twitter:description"
-      content="電通大生による、電通大生のためのマッチングアプリ"
+      content="筑波大生による、筑波大生のためのマッチングアプリ"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:image"
-      content="https://uec-matching.mimifuwacc.workers.dev/og.png"
-    />
   </head>
   <body>
     <header>
-      <h1>電通大生専用マッチングアプリ</h1>
+      <h1>筑波大生専用マッチングアプリ</h1>
     </header>
     <main>
       <section id="question">
-        <p>あなたは電通大生ですか？</p>
+        <p>あなたは筑波大生ですか？</p>
         <button id="yes">はい</button>
         <button id="no">いいえ</button>
       </section>
@@ -62,14 +50,18 @@
       <p>
         inspired by
         <a href="https://hutinoatari.github.io/cheapTransfer/">最安経路検索</a>
+        and
+        <a href="https://uec-matching.mimifuwacc.workers.dev/">電通大生専用マッチングアプリ</a>
       </p>
 
       <p>
-        ©
-        <script>
-          document.write(new Date().getFullYear());
-        </script>
-        mimifuwacc
+        © 2026 mimifuwacc (<a href="https://uec-matching.mimifuwacc.workers.dev/">Original</a>)
+        © 2026 <a href="https://github.com/Colk-tech">Colk-tech</a>
+      </p>
+
+      <p>
+        Licensed under the
+        <a href="/assets/LICENSES.txt">MIT License</a>
       </p>
     </footer>
 
@@ -120,7 +112,7 @@
         restartButton.style.display = "inline-block";
 
         resultSection.style.display = "block";
-        resultText.textContent = "電通大生以外は利用することができません";
+        resultText.textContent = "筑波大生以外は利用することができません";
       });
 
       retryButton.addEventListener("click", async () => {
