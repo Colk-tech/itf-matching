@@ -1,5 +1,5 @@
-# UEC-matching
+# ITF.-matching
 
-電通大生による、電通大生のためのマッチングアプリ
+筑波大生による、筑波大生のためのマッチングアプリ
 
 https://uec-matching.mimifuwacc.workers.dev/
