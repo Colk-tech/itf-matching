@@ -359,6 +359,7 @@
       }
 
       .profile {
+        position: relative;
         display: flex;
         align-items: center;
         gap: 18px;
@@ -371,6 +372,42 @@
           var(--surface) 100%
         );
         animation: fade-up 0.55s 0.15s ease both;
+        cursor: pointer;
+        transition:
+          border-color 0.15s ease,
+          transform 0.15s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .profile:hover {
+        border-color: var(--accent);
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px -14px rgba(199, 62, 92, 0.35);
+      }
+
+      .profile__overlay {
+        position: absolute;
+        inset: 0;
+        border-radius: var(--radius);
+        z-index: 1;
+      }
+
+      .profile__overlay:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+
+      .profile > *:not(.profile__overlay) {
+        position: relative;
+        z-index: 2;
+      }
+
+      .profile__info {
+        min-width: 0;
+      }
+
+      .profile__chat {
+        margin-left: auto;
       }
 
       .profile__avatar {
@@ -393,15 +430,6 @@
         margin: 2px 0 0;
         color: var(--text-muted);
         font-size: 0.85rem;
-      }
-
-      .profile-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-        margin-top: 22px;
-        animation: fade-up 0.55s 0.3s ease both;
       }
 
       .retry-actions {
@@ -507,8 +535,12 @@
           padding: 24px 20px;
         }
         .profile {
-          flex-direction: column;
-          align-items: flex-start;
+          flex-wrap: wrap;
+        }
+        .profile__chat {
+          margin-left: 0;
+          width: 100%;
+          justify-content: center;
         }
       }
     </style>
@@ -767,8 +799,16 @@
         headline.textContent = "マッチが成立しました";
         resultBody.appendChild(headline);
 
-        const profile = document.createElement("div");
+        const profile = document.createElement("article");
         profile.className = "profile";
+
+        const overlay = document.createElement("a");
+        overlay.className = "profile__overlay";
+        overlay.href = "https://x.com/Colk_";
+        overlay.target = "_blank";
+        overlay.rel = "noopener noreferrer";
+        overlay.setAttribute("aria-label", "伊藤 愛基 のプロフィールを開く");
+        profile.appendChild(overlay);
 
         const avatar = document.createElement("img");
         avatar.className = "profile__avatar";
@@ -780,6 +820,7 @@
         profile.appendChild(avatar);
 
         const info = document.createElement("div");
+        info.className = "profile__info";
         const name = document.createElement("p");
         name.className = "profile__name";
         name.textContent = "伊藤 愛基";
@@ -790,29 +831,16 @@
         info.appendChild(handle);
         profile.appendChild(info);
 
-        resultBody.appendChild(profile);
-
-        const actions = document.createElement("div");
-        actions.className = "profile-actions";
-
-        const profileLink = document.createElement("a");
-        profileLink.className = "btn btn--ghost";
-        profileLink.href = "https://x.com/Colk_";
-        profileLink.textContent = "プロフィールを見る";
-        profileLink.target = "_blank";
-        profileLink.rel = "noopener noreferrer";
-        actions.appendChild(profileLink);
-
         const chatLink = document.createElement("a");
-        chatLink.className = "btn btn--accent";
+        chatLink.className = "btn btn--accent profile__chat";
         chatLink.href =
           "https://x.com/messages/compose?recipient_id=1143516189743652864";
         chatLink.textContent = "チャットする";
         chatLink.target = "_blank";
         chatLink.rel = "noopener noreferrer";
-        actions.appendChild(chatLink);
+        profile.appendChild(chatLink);
 
-        resultBody.appendChild(actions);
+        resultBody.appendChild(profile);
       };
 
       const runMatching = async () => {
